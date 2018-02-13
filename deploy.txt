@@ -1,0 +1,29 @@
+cd /data/application/
+
+git remote update origin --prune
+
+git branch -a
+
+git checkout -t  remotes/origin/release/wmsapp-20171109
+
+9612019520419810091075
+
+61290983103720002628
+
+
+61290983103720002949
+
+520419810089706
+
+
+520419810093123
+
+
+
+@Component(value="IWmsBizAccountProvider")
+
+@Component(value="IWmsBizAddressProvider")
+
+@Component(value="IWmsIBizSupplierProvider")
+
+@Component(value="IWmsBizWarehouseProvider")
