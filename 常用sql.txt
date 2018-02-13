@@ -1,0 +1,156 @@
+SELECT * FROM manualinvdistrpolicy;
+
+TRUNCATE TABLE COP_WAIT;
+TRUNCATE TABLE COP_RESPONSE;
+TRUNCATE TABLE COP_WORKFLOW_INSTANCE;
+TRUNCATE TABLE COP_WORKFLOW_INSTANCE_ERROR;
+TRUNCATE TABLE COP_QUEUE;
+TRUNCATE TABLE COP_AUDIT_TRAIL_EVENT;
+
+TRUNCATE TABLE inventorylock;
+
+TRUNCATE TABLE asynnotifyinfo;
+TRUNCATE TABLE manifestinfo;
+
+
+SELECT * FROM schedulerconfig ;
+
+UPDATE schedulerconfig SET cronExp ='0 0/1 * ? * *'
+
+UPDATE schedulerconfig SET autoStart = 0
+
+UPDATE schedulerconfig SET autoStart = 1 WHERE defaultOwnerId = 2;
+
+UPDATE outboundorder SET orderStatus = 'CANCELED'
+
+SELECT * FROM inventory;
+
+UPDATE inventory SET totalcount	= 100000;
+
+
+
+
+SELECT * FROM offshelforder;
+
+SELECT * FROM offshelforderdetail WHERE offshelfordId = 13
+
+SELECT * FROM outboundorder ORDER BY id DESC
+
+SELECT * FROM outboundorder WHERE id = 208
+
+-- 一票一件，在虚拟包裹
+SELECT * FROM outboundvirtualparcel;
+
+
+TRUNCATE TABLE asynnotifyinfo;
+-- ORD0015999779873816
+SELECT * FROM asynnotifyinfo;
+
+ORD00159999999452626
+
+
+
+ORD12348219
+
+SELECT * FROM outboundorder WHERE businessNum = 'ORD12348219'
+
+SELECT * FROM asynnotifyinfo;
+
+SELECT id,businessNum,orderStatus,courierCode,errorCode,errorMessage,courierShipmentNo,prodType,orderSkuType,courierAccountId,courierProductId FROM outboundorder  WHERE id = 220;
+
+SELECT * FROM outboundorder WHERE id = 219;
+
+SELECT * FROM outboundproduct WHERE outboundOrderId = 219
+
+
+SELECT * FROM 
+
+UPDATE outboundorder SET orderStatus='PACK_PENDING',errorCode=NULL,errorMessage=NULL WHERE id = 215
+
+
+UPDATE outboundorder SET orderStatus='BILL_PENDING',errorCode=NULL,errorMessage=NULL WHERE id = 218
+
+UPDATE outboundorder SET courierAccountId = NULL WHERE id = 213
+
+
+SELECT * FROM manifestinfo;
+
+SELECT * FROM cop_workflow_instance;
+
+SELECT * FROM cop_audit_trail_event;
+
+SELECT * FROM schedulerconfig;
+
+UPDATE outboundorder t SET t.`orderStatus` = 'OFFSHELF_ORDER_PENDING',t.`errorCode`=NULL,t.`errorMessage`=NULL WHERE id = 208;
+
+SELECT * FROM inventorybatch WHERE productId=464
+
+UPDATE inventorybatch SET productQty = 200000 WHERE productId=464
+
+UPDATE inventorybatch SET warehouseId = 2 WHERE productId=464;
+
+
+SELECT * FROM inventory WHERE productId = 464 AND warehouseId = 2;
+
+SELECT * FROM inventory WHERE productId = 512 AND warehouseId = 2;
+
+
+UPDATE inventory SET warehouseId = 2 WHERE productId = 464;
+
+SELECT * FROM manifestinfo;
+
+SELECT * FROM product;
+
+SELECT * FROM packagematerial;
+
+-- ATX10UUB5S	ddddd00113       ORD12341011
+-- ATX10UUB4G
+
+SELECT * FROM outboundparcel WHERE businessNum = 'ORD12346748'
+SELECT * FROM parcelproductqty WHERE outboundparcelId  WHERE 
+
+SELECT * FROM outboundorder WHERE businessNum = 'ORD12348219'
+
+SELECT * FROM asynnotifyinfo WHERE businessNum = 'ORD12348219'
+
+SELECT * FROM ordernummgmt;`asynnotifyinfo`
+
+SELECT * FROM `cop_workflow_instance`
+SELECT * FROM asynnotifyinfo WHERE businessNum = 'ORD12348219'
+
+SELECT * FROM inventorylock WHERE productId IN(512,464) AND warehouseId = 2;
+
+SELECT * FROM inventory WHERE productId IN(512,464) AND warehouseId = 2;
+
+
+SELECT * FROM inventory WHERE productId =512 AND warehouseId = 2;
+SELECT * FROM inventory WHERE productId =464 AND warehouseId = 2;
+
+UPDATE inventory SET totalCount = 10000;
+
+SELECT * FROM inventory WHERE id IN( 1263665, 1099972)
+
+SELECT * FROM cop_workflow_instance
+
+
+SELECT * FROM inventorybatch WHERE warehouseid = 2;
+
+UPDATE inventorybatch SET productQty = 10000 WHERE warehouseid = 2;
+
+SELECT * FROM warerule;
+SELECT * FROM warerulecontainprodrel;
+
+
+SELECT * FROM outboundorder WHERE businessType = 'FBA'
+
+
+
+
+
+
+
+
+
+
+
+

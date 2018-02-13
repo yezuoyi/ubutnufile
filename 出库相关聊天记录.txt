@@ -1,0 +1,182 @@
+INSERT INTO `manualinvdistrpolicy` (`id`, `createdBy`, `createdDate`, `memo`, `modifiedBy`, `modifiedDate`, `isActive`, `name`, `passageIds`, `priority`, `warehouseAreaIds`, `xyz`, `xyzValue`, `warehouseId`) VALUES ('2', '106', NOW(), NULL, '106', NOW(), '1', '仓库2的库存分配策略', NULL, '1', NULL, NULL, NULL, '2');
+
+INSERT INTO `invdistrpolicy` (`id`, `createdBy`, `createdDate`, `memo`, `modifiedBy`, `modifiedDate`, `isActive`, `priority`, `businessNums`, `courierAccountId`, `errorMessage`, `manifestStatus`, `path`, `successCount`, `totalCost`, `totalCount`, `policyId`, `warehouseId`, `wareRuleId`, `manualInvDistrPolicyId`) VALUES ('91', '106', NOW(), NULL, '106', NOW(), '1', '10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', NULL, NULL, '2');
+INSERT INTO `invdistrpolicy` (`id`, `createdBy`, `createdDate`, `memo`, `modifiedBy`, `modifiedDate`, `isActive`, `priority`, `businessNums`, `courierAccountId`, `errorMessage`, `manifestStatus`, `path`, `successCount`, `totalCost`, `totalCount`, `policyId`, `warehouseId`, `wareRuleId`, `manualInvDistrPolicyId`) VALUES ('92', '106', NOW(), NULL, '106', NOW(), '1', '20', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, '2');
+
+
+1还有拉取trackingnum, 1.卖家平台账号设置为快速上传的时候。在wms同步可下加状态到oms的时候。wms如果已经生成trackingnum，oms会到wms拉取trackingnum,，这个时候在oms页面显示trackingnm 2.卖家平台账号设置非快速上传的时候，在wms同步shipped（已发货）的时候。oms会到wms拉取tracingnum，并进行上传。这个时候在oms页面显示trakcingnum,
+
+
+可下架的状态 会推送到oms 物流错误的状态会推送到oms shipped的状态会推送到oms
+
+
+库存不管这个。库存只管在哪个货位有库存。库存能不能用由业务决定啊。
+
+update  asynotify set status = new  where businessNum = xxx and  type = xxx
+
+
+1.可下架的状态 wms会推送给oms 这个时候oms的状态为发货中
+
+2.在生成trackingNum失败的时候。wms会将物流错误的状态推送给oms，这个时候oms的状态图为物流错误
+
+
+4.wms确认库存的时候。库存不足，这个时候wms会将状态推送给oms，oms显示状态为库存不足
+
+
+我簡單的說就是: 
+1. manifestscheduler 讀NEW狀態的manifestinfo
+2. 調用TMS接口創建manifest, 寫成READY狀態
+3. manifestcompletescheduler, 讀READY狀態的manifestinfo, 結算
+
+
+com.omniselling.wms.ms.workflow.adapter.outbound.CourierCommitAction
+
+
+
+谭柳
+谭柳
+SELECT i.*,p.`accountId` ,p.`productSku` ,p.`barCode` FROM inventory i 
+LEFT JOIN stockinventory si ON i.`stockInventoryId` = si.`id`
+LEFT JOIN product p ON i.`productId` = p.`id`
+LEFT JOIN storagelocation sl ON i.`storagelocationId` = sl.`id`
+WHERE  i.`warehouseId` = 2 AND sl.`locked` = FALSE AND i.`massType` = 'LP' AND si.`locked` = FALSE;
+
+
+com.omniselling.security.service.impl.SessionAccountInitFilter
+
+
+
+
+
+-- 异步创建运单（请求label）
+/wms-microservcie-web/src/main/java/com/omniselling/scheduleradapter/AsynCreateShipmentAction.java
+-- 异步状态通知（与oms同步状态）
+/wms-microservcie-web/src/main/java/com/omniselling/scheduleradapter/AsynNotifyOmsStatusAction.java
+-- 创建manifset表记录（为后续的物流结算准备）
+/wms-microservcie-web/src/main/java/com/omniselling/scheduleradapter/CourierCommitCreateManifestRecordsAction.java  根据本地仓库Id去
+-- 调用物流结算接口，生成manifset文件
+/wms-microservcie-web/src/main/java/com/omniselling/scheduleradapter/CourierCommitGenerateManifestFilesAction.java
+--波次调用
+/wms-microservcie-web/src/main/java/com/omniselling/scheduleradapter/WaveRulerSchedulerAction.java
+
+
+SELECT DISTINCT we.* FROM cop_workflow_instance_error we 
+JOIN cop_audit_trail_event au ON au.INSTANCE_ID = we.WORKFLOW_INSTANCE_ID WHERE au.CORRELATION_ID LIKE '%ORD0016008792%';
+
+這個就可以看錯誤
+
+
+
+App 
+E:\v5-test\app\omniapp\WebContent\WEB-INF\spring\biz\clientservice.xml
+<beans:entry key="tmscourier" value="http://test.omniselling.net/omnicourier">
+   
+   
+wms微服务
+E:\testmaster\wms\wms-microservice-web\src\main\resources\application.properties
+
+V5Service.omnicourier.url= http://test.omniselling.net/omnicourier
+
+
+湯浩宇(研發部-湯浩宇)
+浩宇
+什麼如何處理?
+湯浩宇(研發部-湯浩宇)
+浩宇
+什麼問題我都不知道...
+湯浩宇(研發部-湯浩宇)
+浩宇
+總之, 如果你們要正常清理流程的話, 就應該terminate掉它
+湯浩宇(研發部-湯浩宇)
+浩宇
+如果是進入error狀態的要從db裡面清理, 就要吧workflow_instance_id相關的東西從 cop_queue, cop_wait 和 cop_workflow_instance裡面清掉
+湯浩宇(研發部-湯浩宇)
+浩宇
+當然最好不要從數據庫層清理, 這可是生產環境
+
+
+1.先备份表，防止修改错误
+ create TABLE workflowstepbak
+ 
+ select * from workflowstep;
+
+ 2.删除物流结算和上传发票节点配置
+ delete from workflowstep where id in(72,73)
+ 
+ 3.更新计费节点的触发条件
+update workflowstep set triggerEvents = 'CONFIRM_OUTBOUND-CONFIRM_OUTBOUND_SUCC' where id =74
+
+4.修改代码（出库确认代码修改）
+    BizConfirmOutboundProviderImpl类confirmOutboundForOutboundNo方法
+  
+  newOrder.setOrderStatus(OutboundOrderStatus.COURIER_COMMIT_PENDING);
+        //wlResult = OutboundOrderWorkFlowResultType.CONFIRM_OUTBOUND_SUCC;
+        wlResult = OutboundOrderWorkFlowResultType.LABEL_SCANED;
+    
+    修改为：
+     newOrder.setOrderStatus(OutboundOrderStatus.BILL_PENDING);
+        wlResult = OutboundOrderWorkFlowResultType.CONFIRM_OUTBOUND_SUCC;
+    
+自定义下架
+BizManualInvDistrPolicyProviderImpl manrun
+
+
+
+11:25:59.436 [P#DEFAULT#2] INFO  PWF>OutboundOrderFlow_V1 - FBA0010568003-OutboundOrderFlow_V1 returned with data ActionResponse [id=null, correlationId=FBA0010568003-OutboundOrderFlow_V1, senderCId=null, senderEventId=null, resultEnum=CREATE_BY_WORKER, processedTime=null, processedBy=null, note=null, rollforward=false]
+11:25:59.436 [P#DEFAULT#2] INFO  PWF>OutboundOrderFlow_V1 - action completed with result=CREATE_BY_WORKER
+11:25:59.437 [P#DEFAULT#2] INFO  PWF>OutboundOrderFlow_V1 - OmniWorkflow Ended, triggerEvent=CHECK_OFFSHELF_WORK_ORDER-CREATE_BY_WORKER-> nextStep is undefined
+11:25:59.437 [P#DEFAULT#2] INFO  PWF>OutboundOrderFlow_V1 - OutboundOrderFlow_V1@9c126009-f918-4bbe-a292-3a45443e5709 ended
+
+
+
+
+select * from workflowstepbak111 where triggerEvents like '%CHECK_OFFSHELF_WORK_ORDER-CREATE_BY_WORKER%'
+
+
+
+
+
+研發部-湯浩宇
+09:44:31
+浩宇
+哦, 那有可能你的工作流在別人的機器上面執行所以你在本機看不到log
+
+
+
+ORD0015976615
+黄文军
+文军
+ORD0015976616
+黄文军
+文军
+ORD0015976617
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

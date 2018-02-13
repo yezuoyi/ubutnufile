@@ -1,0 +1,216 @@
+SELECT * FROM manualinvdistrpolicy;
+
+TRUNCATE TABLE COP_WAIT;
+TRUNCATE TABLE COP_RESPONSE;
+TRUNCATE TABLE COP_WORKFLOW_INSTANCE;
+TRUNCATE TABLE COP_WORKFLOW_INSTANCE_ERROR;
+TRUNCATE TABLE COP_QUEUE;
+TRUNCATE TABLE COP_AUDIT_TRAIL_EVENT;
+
+TRUNCATE TABLE inventorylock;
+
+TRUNCATE TABLE asynnotifyinfo;
+TRUNCATE TABLE manifestinfo;
+
+
+SELECT * FROM schedulerconfig ;
+
+UPDATE schedulerconfig SET cronExp ='0 0/1 * ? * *'
+
+UPDATE schedulerconfig SET autoStart = 0
+
+UPDATE schedulerconfig SET autoStart = 1 WHERE defaultOwnerId = 1;
+
+UPDATE outboundorder SET orderStatus = 'CANCELED'
+
+SELECT * FROM inventory;
+
+UPDATE inventory SET totalcount	= 100000;
+
+
+
+
+SELECT * FROM offshelforder;
+
+SELECT * FROM offshelforderdetail WHERE offshelfordId = 13
+
+SELECT * FROM outboundorder ORDER BY id DESC
+
+SELECT * FROM outboundorder WHERE id = 208
+
+-- 一票一件，在虚拟包裹
+SELECT * FROM outboundvirtualparcel;
+
+
+TRUNCATE TABLE asynnotifyinfo;
+-- ORD0015999779873816
+SELECT * FROM asynnotifyinfo;
+
+SELECT * FROM outboundvirtualparcel WHERE businessNum = 'ORD0015942589'
+
+ 
+
+SELECT * FROM asynnotifyinfo;
+
+SELECT * FROM OUTBOUNDORDER  WHERE businessNum = 'ORD0015942589'
+
+SELECT id,businessNum,orderStatus,courierCode,errorCode,errorMessage,courierShipmentNo,prodType,orderSkuType,courierAccountId,courierProductId FROM outboundorder  WHERE id = 318;
+
+SELECT * FROM outboundorder WHERE id = 219;
+
+SELECT * FROM outboundproduct WHERE outboundOrderId = 314
+
+SELECT * FROM cop_workflow_instance
+
+SELECT * FROM cop_workflow_instance_error WHERE WORKFLOW_INSTANCE_ID='761447bc-39a2-48a9-85a6-8708a610dd95'
+
+UPDATE outboundorder SET orderStatus='PACK_PENDING',errorCode=NULL,errorMessage=NULL WHERE id = 215
+
+
+UPDATE outboundorder SET orderStatus='BILL_PENDING',errorCode=NULL,errorMessage=NULL WHERE id = 218
+
+UPDATE outboundorder SET courierAccountId = NULL WHERE id = 213
+
+
+SELECT * FROM manifestinfo;
+
+SELECT * FROM cop_workflow_instance;
+
+SELECT * FROM cop_audit_trail_event;
+
+SELECT * FROM schedulerconfig;
+
+UPDATE outboundorder t SET t.`orderStatus` = 'OFFSHELF_ORDER_PENDING',t.`errorCode`=NULL,t.`errorMessage`=NULL WHERE id = 208;
+
+SELECT * FROM inventorybatch WHERE productId=110196
+
+UPDATE inventorybatch SET productQty = 200000 WHERE productId=464
+
+UPDATE inventorybatch SET warehouseId = 2 WHERE productId=464;
+
+
+SELECT * FROM inventory WHERE productId = 464 AND warehouseId = 2;
+
+SELECT * FROM inventory WHERE productId = 512 AND warehouseId = 2;
+
+
+UPDATE inventory SET warehouseId = 2 WHERE productId = 464;
+
+SELECT * FROM manifestinfo;
+
+SELECT * FROM product;
+
+SELECT * FROM packagematerial;
+
+-- ATX10UUB5S	ddddd00113       ORD12348632  ORD001599726
+-- ATX10UUB4G
+
+
+
+SELECT * FROM outboundparcel WHERE businessNum = 'ORD0015942587'
+SELECT * FROM parcelproductqty WHERE outboundparcelId  WHERE 
+
+SELECT * FROM outboundorder WHERE businessNum = 'ORD0015942587'
+
+SELECT * FROM asynnotifyinfo WHERE businessNum = 'ORD0015942587'
+
+SELECT * FROM ordernummgmt;`asynnotifyinfo`
+
+SELECT * FROM `cop_workflow_instance`
+SELECT * FROM asynnotifyinfo WHERE businessNum = 'ORD12348219'
+
+SELECT * FROM inventorylock WHERE productId IN(512,464) AND warehouseId = 2;
+
+SELECT * FROM inventory WHERE productId IN(512,464) AND warehouseId = 2;
+
+
+SELECT * FROM inventory WHERE productId =512 AND warehouseId = 2;
+SELECT * FROM inventory WHERE productId =464 AND warehouseId = 2;
+
+UPDATE inventory SET totalCount = 10000;
+
+SELECT * FROM inventory WHERE id IN( 1263665, 1099972)
+
+SELECT * FROM cop_workflow_instance
+
+
+SELECT * FROM inventorybatch WHERE warehouseid = 2;
+
+UPDATE inventorybatch SET productQty = 10000 WHERE warehouseid = 2;
+
+SELECT * FROM warerule;
+SELECT * FROM warerulecontainprodrel;
+
+
+SELECT * FROM outboundorder WHERE businessType = 'FBA'
+
+
+
+UPDATE asynnotifyinfo SET STATUS = 'NEW' WHERE businessNum = 'ORD0015942585' AND asynNotifyType = 'OMS_SYN_STATUS'
+
+
+SELECT * FROM asynnotifyinfo WHERE  businessNum = 'ORD0015942589' ;
+
+
+
+SELECT si.*,p.productSku FROM stockInventory si LEFT JOIN product p ON si.productId = p.id WHERE si.warehouseId = 2
+
+
+SELECT i.*,p.`accountId` ,p.`productSku` ,p.`barCode` FROM inventory i 
+LEFT JOIN stockinventory si ON i.`stockInventoryId` = si.`id`
+LEFT JOIN product p ON i.`productId` = p.`id`
+LEFT JOIN storagelocation sl ON i.`storagelocationId` = sl.`id`
+WHERE  i.`warehouseId` =2 AND sl.`locked` = FALSE AND i.`massType` = 'LP' AND si.`locked` = FALSE 
+ORDER BY  i.totalCount DESC
+;
+
+SELECT * FROM product WHERE `productSku`='X1785'
+
+SELECT * FROM account WHERE id=633
+
+SELECT * FROM workflowstep WHERE wfName = 'OutboundOrderFlow_V1'
+
+SELECT * FROM workflowstep w
+
+SELECT * FROM warehouse WHERE warehouseName = 'Toronto Warehouse'
+
+
+
+
+
+
+
+
+
+SELECT * FROM ordernummgmt
+
+SELECT * FROM manualinvdistrpolicy;
+
+SELECT * FROM policy;
+
+SELECT * FROM scanordersetting
+
+
+
+SELECT i.*,p.`accountId` ,p.`productSku` ,p.`barCode` FROM inventory i 
+LEFT JOIN stockinventory si ON i.`stockInventoryId` = si.`id`
+LEFT JOIN product p ON i.`productId` = p.`id`
+LEFT JOIN storagelocation sl ON i.`storagelocationId` = sl.`id`
+WHERE  i.`warehouseId` =2 AND sl.`locked` = FALSE AND i.`massType` = 'LP' AND si.`locked` = FALSE 
+ORDER BY  i.totalCount DESC
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
