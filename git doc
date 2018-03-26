@@ -1,0 +1,30 @@
+查看项目的分支们(包括本地和远程) 
+命令行 : $ git branch -a
+
+删除本地分支 
+命令行 : $ git branch -d <BranchName>
+
+删除远程分支 
+命令行 : $ git push origin --delete <BranchName>
+
+查看删除后分支们 
+命令行 : $ git branch -a
+
+
+1,从已有的分支创建新的分支(如从master分支),创建一个dev分支
+
+git checkout -b dev
+
+
+3.建立本地到上游（远端）仓的链接 --这样代码才能提交上去
+
+git branch --set-upstream-to=origin/dev 
+
+取消对master的跟踪
+
+git branch --unset-upstream master
+
+
+
+
+
